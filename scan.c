@@ -113,7 +113,7 @@ static TokenType IDFormatLookup(char *s) {
     /*ID从第二个字符开始范围是0-9a-zA-Z*/
     for (int i = 1; i < strlen(s); i++) {
         char c = s[i];
-        if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')))
+        if (!(isalpha(c) || isdigit(c)))
             return ERRORID;
     }
     return ID;
@@ -262,7 +262,7 @@ TokenType getToken(void) { /* index for storing into tokenString */
                 }
                 break;
             case INID:
-                if (!isalpha(c)) { /* backup in the input */
+                if (!(isalpha(c) || isdigit(c))) { /* backup in the input */
                     ungetNextChar();
                     save = false;
                     state = DONE;

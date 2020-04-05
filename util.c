@@ -92,7 +92,8 @@ void printToken(TokenType token, const char *tokenString) {
             fprintf(listing, "ID, name= %s\n", tokenString);
             break;
         case ERRORID:
-            fprintf(listing,"ID %s doesn't conform to format.");
+            fprintf(listing, "ID '%s' doesn't conform to format.\n", tokenString);
+            break;
         case STR:
             fprintf(listing, "STR, val='%s'\n", tokenString);
             break;
