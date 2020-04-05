@@ -107,6 +107,17 @@ static TokenType reservedLookup(char *s) {
     return ID;
 }
 
+/*检验ID是否符合要求*/
+static TokenType IDFormatLookup(char *s) {
+    int i;
+    /*ID从第二个字符开始范围是0-9a-zA-Z*/
+    for (int i = 1; i < strlen(s); i++) {
+        char c = s[i];
+        if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')))
+            return ERRORID;
+    }
+    return ID;
+}
 /****************************************/
 /* the primary function of the scanner  */
 /****************************************/
@@ -269,8 +280,12 @@ TokenType getToken(void) { /* index for storing into tokenString */
             tokenString[tokenStringIndex++] = (char) c;
         if (state == DONE) {
             tokenString[tokenStringIndex] = '\0';
+            /*检验是否是关键字*/
             if (currentToken == ID)
                 currentToken = reservedLookup(tokenString);
+            /*检验ID是否符合要求*/
+            if (currentToken == ID)
+                currentToken = IDFormatLookup(tokenString);
         }
     }
     if (TraceScan) {

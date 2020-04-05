@@ -58,6 +58,7 @@ typedef enum
     WHILE,
     /* multicharacter tokens */
     ID,
+    ERRORID,
     NUM,
     STR,
     /* special symbols */

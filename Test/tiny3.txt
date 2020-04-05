@@ -10,3 +10,6 @@ if x>0 and x<100 then {don't compute if x<=0}
 	while x>0;
 	write fact;
 end
+{Test
+My
+Comment}
