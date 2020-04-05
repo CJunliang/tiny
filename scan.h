@@ -10,7 +10,7 @@
 
 /* MAXTOKENLEN is the maximum size of a token */
 /* token的最大数目 */
-#define MAXTOKENLEN 40
+#define MAXTOKENLEN 255
 
 /* tokenString array stores the lexeme of each token */
 /* tokenString数组存储每个token的词素 */

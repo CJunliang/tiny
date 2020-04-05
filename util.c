@@ -22,6 +22,7 @@ void printToken(TokenType token, const char *tokenString) {
         case NOT:
         case INT:
         case BOOL:
+        case STRING:
         case FLOAT:
         case DOUBLE:
         case DO:
@@ -90,8 +91,8 @@ void printToken(TokenType token, const char *tokenString) {
         case ID:
             fprintf(listing, "ID, name= %s\n", tokenString);
             break;
-        case STRING:
-            fprintf(listing, "STRING, val=%s\n", tokenString);
+        case STR:
+            fprintf(listing, "STR, val='%s'\n", tokenString);
             break;
         case ERROR:
             fprintf(listing, "ERROR: %s\n", tokenString);

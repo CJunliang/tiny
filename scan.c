@@ -150,7 +150,7 @@ TokenType getToken(void) { /* index for storing into tokenString */
                 } else if (c == '\'') {
                     save = false;
                     state = INSTRING;
-                    currentToken = STRING;
+                    currentToken = STR;
                 } else {
                     /* other */
                     state = DONE;

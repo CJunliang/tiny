@@ -59,6 +59,7 @@ typedef enum
     /* multicharacter tokens */
     ID,
     NUM,
+    STR,
     /* special symbols */
     ASSIGN, /* := */
     EQ,     /* = */
