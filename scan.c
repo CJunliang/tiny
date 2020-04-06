@@ -158,10 +158,14 @@ TokenType getToken(void) { /* index for storing into tokenString */
                 else if (c == '{') {
                     save = false;
                     state = INCOMMENT;
+                    CommentOver = false;
+                    StrOrCommentLine = lineno;
                 } else if (c == '\'') {
                     save = false;
                     state = INSTRING;
                     currentToken = STR;
+                    StringOver = false;
+                    StrOrCommentLine = lineno;
                 } else {
                     /* other */
                     state = DONE;
@@ -213,13 +217,19 @@ TokenType getToken(void) { /* index for storing into tokenString */
                 if (c == EOF) {
                     state = DONE;
                     currentToken = ENDFILE;
-                } else if (c == '}')
+                } else if (c == '}') {
                     state = START;
+                    CommentOver = true;
+                }
                 break;
             case INSTRING:
                 if (c == '\'') {
                     save = false;
                     state = DONE;
+                    StringOver = true;
+                } else if (c == EOF) {
+                    state = DONE;
+                    currentToken = ENDFILE;
                 }
                 break;
             case INASSIGN:

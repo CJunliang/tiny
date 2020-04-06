@@ -40,13 +40,14 @@ bool TraceCode = false;
 
 bool Error = false;
 
-int main(int argc, char *argv[])
-{
+bool StringOver = true;
+bool CommentOver = true;
+
+int main(int argc, char *argv[]) {
     TreeNode *syntaxTree;
     char pgm[120]; /* source code file name */
     /* 参数必须有两个 */
-    if (argc != 2)
-    {
+    if (argc != 2) {
         fprintf(stderr, "usage: %s <filename>\n", argv[0]);
         exit(1);
     }
@@ -55,8 +56,7 @@ int main(int argc, char *argv[])
     if (strchr(pgm, '.') == NULL)
         strcat(pgm, ".tny");
     source = fopen(pgm, "r");
-    if (source == NULL)
-    {
+    if (source == NULL) {
         fprintf(stderr, "File %s not found\n", pgm);
         exit(1);
     }
@@ -64,10 +64,9 @@ int main(int argc, char *argv[])
     listing = stdout; /* send listing to screen */
     fprintf(listing, "\nTINY COMPILATION: %s\n\n", pgm);
 
-    while (getToken() != ENDFILE)
-        ;
+    while (getToken() != ENDFILE);
 
     fclose(source);
-    system("pause");
+//    system("pause");
     return 0;
 }
