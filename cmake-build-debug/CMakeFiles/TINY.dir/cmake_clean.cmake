@@ -1,9 +1,7 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/TINY.dir/main.c.obj"
-  "TINY.exe"
-  "TINY.exe.manifest"
+  "CMakeFiles/TINY.dir/main.c.o"
+  "TINY"
   "TINY.pdb"
-  "libTINY.dll.a"
 )
 
 # Per-language clean rules from dependency scanning.

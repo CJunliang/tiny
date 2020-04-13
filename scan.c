@@ -111,7 +111,7 @@ static TokenType reservedLookup(char *s) {
 static TokenType IDFormatLookup(char *s) {
     int i;
     /*ID从第二个字符开始范围是0-9a-zA-Z*/
-    for (int i = 1; i < strlen(s); i++) {
+    for (i = 1; i < strlen(s); i++) {
         char c = s[i];
         if (!(isalpha(c) || isdigit(c)))
             return ERRORID;

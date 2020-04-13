@@ -55,11 +55,12 @@ void printToken(TokenType token, const char *tokenString) {
             fprintf(listing, "SYM, value= %s\n", tokenString);
             break;
         case ENDFILE:
-            fprintf(listing, "EOF, ");
+            fprintf(listing, "EOF");
             if (!StringOver)
-                fprintf(listing, "The line %d of string right quote match error.\n", StrOrCommentLine);
+                fprintf(listing, ", The line %d of string right quote match error.", StrOrCommentLine);
             if (!CommentOver)
-                fprintf(listing, "The line %d of comment right parenthesis matching error.\n", StrOrCommentLine);
+                fprintf(listing, ", The line %d of comment right parenthesis matching error.", StrOrCommentLine);
+            fprintf(listing, "\n");
             break;
         case NUM:
             fprintf(listing, "NUM, val= %s\n", tokenString);
