@@ -26,6 +26,8 @@
 /* allocate global variables */
 /* 分配全局变量 */
 int lineno = 0;
+int CommentLine = 0;
+int StringLine = 0;
 FILE *source;
 FILE *listing;
 FILE *code;
@@ -40,8 +42,10 @@ bool TraceCode = false;
 
 bool Error = false;
 
+/*分配和设置string和comment的标志*/
 bool StringOver = true;
 bool CommentOver = true;
+bool StringStraddle = false;
 
 int main(int argc, char *argv[]) {
     TreeNode *syntaxTree;

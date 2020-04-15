@@ -14,11 +14,11 @@ typedef enum {
     START,
     INASSIGN,  /* 分配 */
     INCOMMENT, /* 注释 */
-    INNUM,       /* 数字 */
-    INSTRING,   /*string*/
-    INID,       /* ID */
-    INME,       /*大于*/
-    INLE,       /*小于*/
+    INNUM,     /* 数字 */
+    INSTRING,  /*string*/
+    INID,      /* ID */
+    INME,      /*大于*/
+    INLE,      /*小于*/
     DONE
 } StateType;
 
@@ -31,9 +31,9 @@ char tokenString[MAXTOKENLEN + 1];
 /* BUFLEN =源代码行的输入缓冲区的长度 */
 #define BUFLEN 256
 
-static char lineBuf[BUFLEN]; /* holds the current line */
-static int linepos = 0;         /* current position in LineBuf */
-static int bufsize = 0;         /* current size of buffer string */
+static char lineBuf[BUFLEN];  /* holds the current line */
+static int linepos = 0;       /* current position in LineBuf */
+static int bufsize = 0;       /* current size of buffer string */
 static bool EOF_flag = false; /* corrects ungetNextChar behavior on EOF 纠正了EOF上的ungetNextChar行为*/
 
 /* getNextChar fetches the next non-blank character
@@ -41,7 +41,7 @@ static bool EOF_flag = false; /* corrects ungetNextChar behavior on EOF 纠正�
    exhausted */
 /* getNextChar从lineBuf获取下一个非空白字符，如果用完lineBuf则换行 */
 static int getNextChar(void) {
-    if (!(linepos < bufsize)) {
+    if (linepos >= bufsize) {
         /* 行号 */
         lineno++;
         /* fgets会读取到第一个换行符/文件末尾/缓冲区最大长度少一个字符 */
@@ -159,13 +159,13 @@ TokenType getToken(void) { /* index for storing into tokenString */
                     save = false;
                     state = INCOMMENT;
                     CommentOver = false;
-                    StrOrCommentLine = lineno;
+                    CommentLine = lineno;
                 } else if (c == '\'') {
                     save = false;
                     state = INSTRING;
                     currentToken = STR;
                     StringOver = false;
-                    StrOrCommentLine = lineno;
+                    StringLine = lineno;
                 } else {
                     /* other */
                     state = DONE;
@@ -231,6 +231,8 @@ TokenType getToken(void) { /* index for storing into tokenString */
                     state = DONE;
                     currentToken = ENDFILE;
                 }
+                if (StringLine != lineno)
+                    StringStraddle = true;
                 break;
             case INASSIGN:
                 state = DONE;
@@ -294,12 +296,15 @@ TokenType getToken(void) { /* index for storing into tokenString */
             if (currentToken == ID)
                 currentToken = reservedLookup(tokenString);
             /*检验ID是否符合要求*/
-            if (currentToken == ID)
-                currentToken = IDFormatLookup(tokenString);
+            /*if (currentToken == ID)
+                currentToken = IDFormatLookup(tokenString);*/
         }
     }
     if (TraceScan) {
-        fprintf(listing, "\t%d: ", lineno);
+        if (currentToken != ENDFILE)
+            fprintf(listing, "\t%d: ", lineno);
+        else
+            fprintf(listing, "%d: ", lineno);
         printToken(currentToken, tokenString);
     }
     return currentToken;

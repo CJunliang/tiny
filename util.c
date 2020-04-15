@@ -35,7 +35,7 @@ void printToken(TokenType token, const char *tokenString) {
         case UNTIL:
         case READ:
         case WRITE:
-            fprintf(listing, "KEY, value= %s\n", tokenString);
+            fprintf(listing, "KEY, val= %s\n", tokenString);
             break;
         case ASSIGN:
         case LT:
@@ -52,14 +52,18 @@ void printToken(TokenType token, const char *tokenString) {
         case ME:
         case COMMA:
         case PERCENT:
-            fprintf(listing, "SYM, value= %s\n", tokenString);
+            fprintf(listing, "SYM, val= %s\n", tokenString);
             break;
         case ENDFILE:
             fprintf(listing, "EOF");
             if (!StringOver)
-                fprintf(listing, ", The line %d of string right quote match error.", StrOrCommentLine);
+                fprintf(listing, "\nWarming, the line %d of string right quote match error.", StringLine);
+            if (StringStraddle) {
+                fprintf(listing, "\nError, string straddle between line %d and line %d!", StringLine, lineno);
+                StringStraddle = false;
+            }
             if (!CommentOver)
-                fprintf(listing, ", The line %d of comment right parenthesis matching error.", StrOrCommentLine);
+                fprintf(listing, "\nWarming, the line %d of comment right parenthesis matching error.", CommentLine);
             fprintf(listing, "\n");
             break;
         case NUM:
@@ -72,7 +76,11 @@ void printToken(TokenType token, const char *tokenString) {
             fprintf(listing, "ID '%s' doesn't conform to format.\n", tokenString);
             break;
         case STR:
-            fprintf(listing, "STR, val='%s'\n", tokenString);
+            fprintf(listing, "STR, val= '%s'\n", tokenString);
+            if (StringStraddle) {
+                fprintf(listing, "\tError, string straddle between line %d and line %d!\n", StringLine, lineno);
+                StringStraddle = false;
+            }
             break;
         case ERROR:
             fprintf(listing, "ERROR: %s\n", tokenString);

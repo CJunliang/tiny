@@ -87,7 +87,9 @@ extern FILE *listing; /* listing output text file */
 extern FILE *code;    /* code text file for TM simulator */
 
 extern int lineno; /* source line number for listing */
-static int StrOrCommentLine;/*指示str或comment的行数*/
+extern int CommentLine;/*指示comment的行数*/
+extern int StringLine;/*指示string的函数*/
+
 /**************************************************/
 /***********   Syntax tree for parsing ************/
 /***********          语法树解析        ************/
@@ -181,5 +183,6 @@ extern bool Error;
 /*true指示string和comment闭合*/
 extern bool StringOver;
 extern bool CommentOver;
-
+/*True指示string是否跨行*/
+extern bool StringStraddle;
 #endif
