@@ -6,3 +6,6 @@ until	read		write		,		;
 (		)			<			=		>
 <<=		>>=			a2c			123	'EFG'
 % ^ & * # @  2ab
+'x
+y
+z'

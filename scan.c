@@ -16,9 +16,9 @@ typedef enum {
     INCOMMENT, /* 注释 */
     INNUM,     /* 数字 */
     INSTRING,  /*string*/
-    INID,      /* ID */
-    INME,      /*大于*/
-    INLE,      /*小于*/
+    INID,      /*  ID  */
+    INME,      /* 大于等于 */
+    INLE,      /* 小于等于 */
     DONE
 } StateType;
 
@@ -53,6 +53,7 @@ static int getNextChar(void) {
             return lineBuf[linepos++];
         } else {
             EOF_flag = true;
+            lineno--;
             return EOF;
         }
     } else
@@ -107,17 +108,6 @@ static TokenType reservedLookup(char *s) {
     return ID;
 }
 
-/*检验ID是否符合要求*/
-static TokenType IDFormatLookup(char *s) {
-    int i;
-    /*ID从第二个字符开始范围是0-9a-zA-Z*/
-    for (i = 1; i < strlen(s); i++) {
-        char c = s[i];
-        if (!(isalpha(c) || isdigit(c)))
-            return ERRORID;
-    }
-    return ID;
-}
 /****************************************/
 /* the primary function of the scanner  */
 /****************************************/
@@ -245,6 +235,7 @@ TokenType getToken(void) { /* index for storing into tokenString */
                     currentToken = ERROR;
                 }
                 break;
+                /* <= */
             case INLE:
                 state = DONE;
                 if (c == '=')
@@ -255,6 +246,7 @@ TokenType getToken(void) { /* index for storing into tokenString */
                     currentToken = LT;
                 }
                 break;
+                /* >= */
             case INME:
                 state = DONE;
                 if (c == '=')
@@ -266,7 +258,10 @@ TokenType getToken(void) { /* index for storing into tokenString */
                 }
                 break;
             case INNUM:
-                if (!isdigit(c)) { /* backup in the input */
+                if (isalpha(c)) {
+                    separate = true;
+                    state = INID;
+                } else if (!isdigit(c)) { /* backup in the input */
                     ungetNextChar();
                     save = false;
                     state = DONE;
@@ -274,6 +269,7 @@ TokenType getToken(void) { /* index for storing into tokenString */
                 }
                 break;
             case INID:
+                /*字符必须是字母或者是数字*/
                 if (!(isalpha(c) || isdigit(c))) { /* backup in the input */
                     ungetNextChar();
                     save = false;
@@ -295,16 +291,19 @@ TokenType getToken(void) { /* index for storing into tokenString */
             /*检验是否是关键字*/
             if (currentToken == ID)
                 currentToken = reservedLookup(tokenString);
-            /*检验ID是否符合要求*/
-            /*if (currentToken == ID)
-                currentToken = IDFormatLookup(tokenString);*/
+            /*分隔符*/
+            if (separate) {
+                currentToken = ERROR;
+                separate = false;
+            }
         }
     }
     if (TraceScan) {
-        if (currentToken != ENDFILE)
+        if (currentToken == ENDFILE) {
+            if (lineBuf[bufsize - 1] != '\n')
+                fprintf(listing, "\n%d: ", ++lineno);
+        } else
             fprintf(listing, "\t%d: ", lineno);
-        else
-            fprintf(listing, "%d: ", lineno);
         printToken(currentToken, tokenString);
     }
     return currentToken;

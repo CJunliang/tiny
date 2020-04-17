@@ -7,3 +7,5 @@ C:=A and not B;
 do 
 A:=A*2
 while A<=D
+{test
+comment

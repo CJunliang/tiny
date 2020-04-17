@@ -51,19 +51,23 @@ void printToken(TokenType token, const char *tokenString) {
         case LE:
         case ME:
         case COMMA:
+        case QUOTATION:
         case PERCENT:
             fprintf(listing, "SYM, val= %s\n", tokenString);
             break;
         case ENDFILE:
             fprintf(listing, "EOF");
+            /*字符串是否闭合*/
             if (!StringOver)
-                fprintf(listing, "\nWarming, the line %d of string right quote match error.", StringLine);
+                fprintf(listing, "\nError, the line %d of string right quote match error.", StringLine);
+            /*字符串是否跨行*/
             if (StringStraddle) {
                 fprintf(listing, "\nError, string straddle between line %d and line %d!", StringLine, lineno);
                 StringStraddle = false;
             }
+            /*注释是否闭合*/
             if (!CommentOver)
-                fprintf(listing, "\nWarming, the line %d of comment right parenthesis matching error.", CommentLine);
+                fprintf(listing, "\nError, the line %d of comment right parenthesis matching error.", CommentLine);
             fprintf(listing, "\n");
             break;
         case NUM:
@@ -72,11 +76,9 @@ void printToken(TokenType token, const char *tokenString) {
         case ID:
             fprintf(listing, "ID, name= %s\n", tokenString);
             break;
-        case ERRORID:
-            fprintf(listing, "ID '%s' doesn't conform to format.\n", tokenString);
-            break;
         case STR:
             fprintf(listing, "STR, val= '%s'\n", tokenString);
+            /*是否跨行*/
             if (StringStraddle) {
                 fprintf(listing, "\tError, string straddle between line %d and line %d!\n", StringLine, lineno);
                 StringStraddle = false;

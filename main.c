@@ -46,6 +46,7 @@ bool Error = false;
 bool StringOver = true;
 bool CommentOver = true;
 bool StringStraddle = false;
+bool separate = false;
 
 int main(int argc, char *argv[]) {
     TreeNode *syntaxTree;

@@ -36,42 +36,23 @@ typedef enum
     ENDFILE,
     ERROR,
     /* reserved words */
-    IF,
-    THEN,
-    ELSE,
-    END,
-    REPEAT,
-    UNTIL,
-    READ,
-    WRITE,
-    TRUE,
-    FALSE,
-    OR,
-    AND,
-    NOT,
-    INT,
-    BOOL,
-    STRING,
-    FLOAT,
-    DOUBLE,
-    DO,
-    WHILE,
+    IF,THEN,ELSE,END,REPEAT,UNTIL,READ,WRITE,
+    TRUE,FALSE,OR,AND,NOT,INT,BOOL,STRING,FLOAT,DOUBLE,DO,WHILE,
     /* multicharacter tokens */
     ID,
-    ERRORID,
     NUM,
     STR,
     /* special symbols */
-    ASSIGN, /* := */
-    EQ,     /* = */
-    LT,     /* < */
-    PLUS,   /* + */
-    MINUS,  /* - */
-    TIMES,  /* * */
-    OVER,   /* / */
-    LPAREN, /* ( */
-    RPAREN, /* ) */
-    SEMI,  /* ; */
+    ASSIGN,    /* := */
+    EQ,        /* = */
+    LT,        /* < */
+    PLUS,      /* + */
+    MINUS,     /* - */
+    TIMES,     /* * */
+    OVER,      /* / */
+    LPAREN,    /* ( */
+    RPAREN,    /* ) */
+    SEMI,      /* ; */
     MT,        /* > */
     LE,        /* <= */
     ME,        /* >= */
@@ -84,29 +65,32 @@ typedef enum
 /* 一下4个变量都在mian.c定义 */
 extern FILE *source;  /* source code text file */
 extern FILE *listing; /* listing output text file */
-extern FILE *code;    /* code text file for TM simulator */
+extern FILE *code; /* code text file for TM simulator */
 
-extern int lineno; /* source line number for listing */
-extern int CommentLine;/*指示comment的行数*/
-extern int StringLine;/*指示string的函数*/
+extern int lineno;      /* source line number for listing */
+extern int CommentLine; /*指示comment的行数*/
+extern int StringLine;  /*指示string的函数*/
 
 /**************************************************/
 /***********   Syntax tree for parsing ************/
 /***********          语法树解析        ************/
 /**************************************************/
 
-typedef enum {
+typedef enum
+{
     StmtK,
     ExpK
 } NodeKind;
-typedef enum {
+typedef enum
+{
     IfK,
     RepeatK,
     AssignK,
     ReadK,
     WriteK
 } StmtKind;
-typedef enum {
+typedef enum
+{
     OpK,
     ConstK,
     IdK
@@ -114,7 +98,8 @@ typedef enum {
 
 /* ExpType is used for type checking */
 /* ExpType用于类型检查 */
-typedef enum {
+typedef enum
+{
     Void,
     Integer,
     Boolean
@@ -122,16 +107,19 @@ typedef enum {
 
 #define MAXCHILDREN 3
 
-typedef struct treeNode {
+typedef struct treeNode
+{
     struct treeNode *child[MAXCHILDREN];
     struct treeNode *sibling; /* 兄弟 */
     int lineno;
     NodeKind nodekind;
-    union {
+    union
+    {
         StmtKind stmt;
         ExpKind exp;
     } kind;
-    union {
+    union
+    {
         TokenType op;
         int val;
         char *name;
@@ -183,6 +171,8 @@ extern bool Error;
 /*true指示string和comment闭合*/
 extern bool StringOver;
 extern bool CommentOver;
-/*True指示string是否跨行*/
+/*True指示string跨行*/
 extern bool StringStraddle;
+/*true指示id，num和keyword之间有空白符*/
+extern bool separate;
 #endif
